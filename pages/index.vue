@@ -1,10 +1,12 @@
-<template>
-    <div>
-        <h1>Top Page</h1>
-    </div>
-</template>
 <script setup>
 definePageMeta({
-    layout: 'app'
+    layout: 'app',
+    title: 'ホーム'
 })
+
+import Message from '@/components/app/Message.vue'
 </script>
+
+<template>
+    <Message />
+</template>
