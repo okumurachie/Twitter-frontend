@@ -18,7 +18,7 @@
             <!-- 投稿フォーム -->
             <div class="post-box">
                 <label for="textarea">シェア</label>
-                <textarea placeholder="ここに記入" rows="10"></textarea>
+                <textarea placeholder="ここに記入" rows="8"></textarea>
                 <div class="button-wrapper">
                     <button class="post-button">シェアする</button>
                 </div>
@@ -90,6 +90,14 @@
     background-color: #000;
     border: 1px solid #fff;
     margin-bottom: 10px;
+    font-size: 18px;
+    color: #fff;
+    transition: border-color 0.25s ease;
+}
+
+.post-box textarea:focus {
+    outline: none;
+    border-color: #1d9bf0;
 }
 
 .button-wrapper {
@@ -106,6 +114,15 @@
     background: #1d9bf0;
     color: #fff;
     border: none;
+    cursor: pointer;
+    transition:
+        background-color 0.25s ease,
+        transform 0.15s ease;
+}
+
+.post-button:hover {
+    background: #156eaa;
+    transform: translateY(-1px);
 }
 
 .logout {
@@ -115,5 +132,11 @@
     border: none;
     color: #fff;
     cursor: pointer;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        display: none;
+    }
 }
 </style>

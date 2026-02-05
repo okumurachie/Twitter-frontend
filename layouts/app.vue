@@ -6,14 +6,13 @@
                 <h1 class="page-title">{{ route.meta.title }}</h1>
             </div>
             <section class="main-content">
-                <slot />
+                <NuxtPage :key="route.fullPath" />
             </section>
         </div>
     </div>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
 import SideNav from '@/components/app/SideNav.vue'
 const route = useRoute()
 </script>
@@ -53,8 +52,29 @@ const route = useRoute()
 
 .main-content {
     min-height: 128px;
-    padding: 16px;
-    border-bottom: 1px solid #fff;
+    padding: 0;
     overflow-y: auto;
+}
+
+@media (max-width: 767px) {
+    .main-header {
+        padding: 8px 12px;
+        border-bottom: 1px solid #fff;
+        position: sticky;
+        top: 0;
+        background: #000;
+        z-index: 10;
+    }
+
+    .page-title {
+        font-size: 24px;
+    }
+
+    .main-content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+    }
 }
 </style>
