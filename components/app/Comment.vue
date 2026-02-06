@@ -92,7 +92,11 @@ const submit = () => {
 }
 
 .commet-body-wrapper {
+    height: auto;
     padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .comment-header {
@@ -129,10 +133,10 @@ const submit = () => {
 }
 
 .user {
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .content {
-    font-size: 16px;
+    font-size: 14px;
 }
 </style>

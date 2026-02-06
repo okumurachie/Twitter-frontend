@@ -8,8 +8,8 @@
 
                 <div class="actions">
                     <button class="icon-button" @click="toggleLike">
-                        <img src="/images/heart.png" alt="like" />
-                        <span class="like-count">{{ message.likes }}</span>
+                        <img src="/images/heart.png" alt="like" class="heart" :class="{ liked: message.liked }" />
+                        <span v-if="message.likes > 0" class="like-count">{{ message.likes }}</span>
                     </button>
 
                     <button v-if="isMyPost" class="icon-button" @click="deletePost">
@@ -96,9 +96,27 @@ const deletePost = () => {
     gap: 4px;
 }
 
+.like-count {
+    color: #fff;
+}
+
 .icon-button img {
     width: 24px;
     height: 24px;
+}
+
+.heart {
+    width: 24px;
+    height: 24px;
+    transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.heart.liked {
+    filter: invert(27%) sepia(82%) saturate(4000%) hue-rotate(330deg) brightness(95%) contrast(105%);
+}
+
+.icon-button:active .heart {
+    transform: scale(1.2);
 }
 
 .like-count {

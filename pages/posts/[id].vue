@@ -10,20 +10,15 @@ import Message from '@/components/app/Message.vue'
 import Comment from '@/components/app/Comment.vue'
 
 const route = useRoute()
-const postId = route.params.id
+const postId = Number(route.params.id)
+
 
 // 仮データ
 const currentUserId = 1
+const { findMessage, toggleLike } = useMessages()
 
-const message = ref({
-    id: postId,
-    body: 'はじめての投稿です',
-    likes: 3,
-    user: {
-        id: 1,
-        name: 'chii'
-    }
-})
+// グローバルstateから該当メッセージを取得
+const message = computed(() => findMessage(postId))
 
 const comments = ref([
     { id: 1, userName: 'taro', content: 'いいですね！' },
@@ -31,8 +26,7 @@ const comments = ref([
 ])
 
 const onLike = () => {
-    message.value.liked = !message.value.liked
-    message.value.likes += message.value.liked ? 1 : -1
+    toggleLike(postId)
 }
 
 const onSubmitComment = (content) => {
