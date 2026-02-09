@@ -8,10 +8,10 @@
         </div>
         <div class="sidebar-content">
             <nav class="menu">
-                <a href="#" class="menu-item" @click="emit('close')">
+                <NuxtLink to="/" class="menu-item" @click="emit('close')">
                     <img src="/images/home.png" alt="ホームアイコン" class="menu-icon" />
                     <span>ホーム</span>
-                </a>
+                </NuxtLink>
             </nav>
             <!-- ログアウト -->
             <button class="logout" @click="emit('close')">
