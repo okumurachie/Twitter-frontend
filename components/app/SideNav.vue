@@ -1,17 +1,20 @@
 <template>
-    <aside class="sidebar">
+    <div v-if="isOpen" class="overlay" @click="emit('close')"></div>
+
+    <aside :class="['sidebar', { open: isOpen }]">
+        <button class="close-button" @click="emit('close')">×</button>
         <div class="logo">
             <img src="/images/logo.png" alt="サイドバーヘッダー" />
         </div>
         <div class="sidebar-content">
             <nav class="menu">
-                <a href="#" class="menu-item">
+                <a href="#" class="menu-item" @click="emit('close')">
                     <img src="/images/home.png" alt="ホームアイコン" class="menu-icon" />
                     <span>ホーム</span>
                 </a>
             </nav>
             <!-- ログアウト -->
-            <button class="logout">
+            <button class="logout" @click="emit('close')">
                 <img src="/images/logout.png" alt="ログアウトアイコン" class="menu-icon" />
                 <span>ログアウト</span>
             </button>
@@ -26,6 +29,14 @@
         </div>
     </aside>
 </template>
+
+<script setup>
+defineProps({
+    isOpen: Boolean
+})
+
+const emit = defineEmits(['close'])
+</script>
 
 <style scoped>
 .sidebar {
@@ -134,9 +145,63 @@
     cursor: pointer;
 }
 
+.close-button {
+    display: none;
+}
+
+.overlay {
+    display: none;
+}
+
 @media (max-width: 767px) {
+    .overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #000;
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
     .sidebar {
-        display: none;
+        position: fixed;
+        top: 0;
+        left: -80%;
+        width: 80%;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        border-right: 1px solid #fff;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .close-button {
+        display: block;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        font-size: 32px;
+        background: none;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        line-height: 1;
     }
 }
 </style>

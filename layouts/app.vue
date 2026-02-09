@@ -1,8 +1,11 @@
 <template>
     <div class="app-layout">
-        <SideNav />
+        <SideNav :is-open="isSidebarOpen" @close="isSidebarOpen = false" />
         <div class="app-main">
             <div class="main-header">
+                <button class="hamburger" @click="isSidebarOpen = true">
+                    ☰
+                </button>
                 <h1 class="page-title">{{ route.meta.title }}</h1>
             </div>
             <section class="main-content">
@@ -13,8 +16,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import SideNav from '@/components/app/SideNav.vue'
 const route = useRoute()
+const isSidebarOpen = ref(false)
 </script>
 
 <style scoped>
@@ -25,10 +30,14 @@ const route = useRoute()
     color: #fff;
 }
 
-:deep(.sidebar) {
-    width: 25%;
-    min-width: 220px;
-    max-width: 300px;
+.hamburger {
+    display: none;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .app-main {
@@ -57,6 +66,10 @@ const route = useRoute()
 }
 
 @media (max-width: 767px) {
+    .hamburger {
+        display: block;
+    }
+
     .main-header {
         padding: 8px 12px;
         border-bottom: 1px solid #fff;
@@ -75,6 +88,14 @@ const route = useRoute()
         max-width: none;
         margin: 0;
         padding: 0;
+    }
+}
+
+@media (min-width: 768px) {
+    :deep(.sidebar) {
+        width: 25%;
+        min-width: 220px;
+        max-width: 300px;
     }
 }
 </style>
