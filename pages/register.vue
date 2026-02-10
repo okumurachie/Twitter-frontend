@@ -1,10 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 
 definePageMeta({
     layout: 'auth'
 })
+
+const { $auth } = useNuxtApp()
 
 const schema = yup.object({
     username: yup
@@ -36,18 +39,22 @@ const onSubmit = handleSubmit(async (values) => {
     isLoading.value = true
 
     try {
-        // ここに実際の新規登録APIを呼び出す処理を記述
-        // 例: await $fetch('/api/auth/register', { method: 'POST', body: values })
-
-        console.log('新規登録データ:', values)
-
-        // 成功時の処理（例: ログインページへリダイレクト）
-        // await navigateTo('/login')
-
-        alert('新規登録に成功しました')
-    } catch (error) {
+        const userCredential = await createUserWithEmailAndPassword(
+            $auth,
+            values.email,
+            values.password
+        )
+        await updateProfile(userCredential.user, {
+            displayName: values.username
+        })
+        await navigateTo('/')
+    } catch (error: any) {
         console.error('新規登録エラー:', error)
-        alert('新規登録に失敗しました')
+        if (error.code === 'auth/email-already-in-use') {
+            alert('このメールアドレスは既に使用されています')
+        } else {
+            alert('新規登録に失敗しました')
+        }
     } finally {
         isLoading.value = false
     }

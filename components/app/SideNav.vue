@@ -14,7 +14,7 @@
                 </NuxtLink>
             </nav>
             <!-- ログアウト -->
-            <button class="logout" @click="emit('close')">
+            <button class="logout" @click="handleLogout">
                 <img src="/images/logout.png" alt="ログアウトアイコン" class="menu-icon" />
                 <span>ログアウト</span>
             </button>
@@ -30,12 +30,27 @@
     </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { signOut } from 'firebase/auth'
+
 defineProps({
     isOpen: Boolean
 })
 
+const { $auth } = useNuxtApp()
+
 const emit = defineEmits(['close'])
+
+const handleLogout = async () => {
+    try {
+        await signOut($auth)
+        emit('close')
+        await navigateTo('/')
+    } catch (error) {
+        console.error('ログアウトエラー:', error)
+        alert('ログアウトに失敗しました')
+    }
+}
 </script>
 
 <style scoped>
