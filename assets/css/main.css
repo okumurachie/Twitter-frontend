@@ -21,3 +21,28 @@ body {
     margin: 0 auto;
     border-radius: 50px;
 }
+
+.auth-card button:hover:not(:disabled) {
+    background: #2980b9;
+}
+
+.auth-card button:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+input.error {
+    border-color: #e74c3c;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+}
