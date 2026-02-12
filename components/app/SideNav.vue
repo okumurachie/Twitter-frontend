@@ -14,9 +14,13 @@
                 </NuxtLink>
             </nav>
             <!-- ログアウト -->
-            <button class="logout" @click="handleLogout">
+            <button v-if="isLoggedIn" class="logout" @click="handleLogout">
                 <img src="/images/logout.png" alt="ログアウトアイコン" class="menu-icon" />
                 <span>ログアウト</span>
+            </button>
+            <button v-else class="logout" @click="handleLogin">
+                <img src="/images/logout.png" alt="ログインアイコン" class="menu-icon" />
+                <span>ログイン</span>
             </button>
             <!-- 投稿フォーム -->
             <div class="post-box">
@@ -32,6 +36,7 @@
 
 <script setup lang="ts">
 import { signOut } from 'firebase/auth'
+import { ref, onMounted } from 'vue'
 
 defineProps({
     isOpen: Boolean
@@ -40,6 +45,19 @@ defineProps({
 const { $auth } = useNuxtApp()
 
 const emit = defineEmits(['close'])
+
+const isLoggedIn = ref(false)
+
+onMounted(() => {
+    // Firebaseの認証状態を監視
+    if ($auth) {
+        isLoggedIn.value = $auth.currentUser !== null
+        // リアルタイムで認証状態を監視
+        $auth.onAuthStateChanged((user) => {
+            isLoggedIn.value = user !== null
+        })
+    }
+})
 
 const handleLogout = async () => {
     try {
@@ -50,6 +68,11 @@ const handleLogout = async () => {
         console.error('ログアウトエラー:', error)
         alert('ログアウトに失敗しました')
     }
+}
+
+const handleLogin = () => {
+    emit('close')
+    navigateTo('/login')
 }
 </script>
 
