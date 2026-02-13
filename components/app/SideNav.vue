@@ -13,8 +13,10 @@
                     <span>ホーム</span>
                 </NuxtLink>
             </nav>
-            <!-- ログアウト -->
-            <button v-if="isLoggedIn" class="logout" @click="handleLogout">
+            <div v-if="loading" class="auth-loading">
+                読み込み中...
+            </div>
+            <button v-else-if="isLoggedIn" class="logout" @click="handleLogout">
                 <img src="/images/logout.png" alt="ログアウトアイコン" class="menu-icon" />
                 <span>ログアウト</span>
             </button>
@@ -22,12 +24,11 @@
                 <img src="/images/logout.png" alt="ログインアイコン" class="menu-icon" />
                 <span>ログイン</span>
             </button>
-            <!-- 投稿フォーム -->
             <div class="post-box">
                 <label for="textarea">シェア</label>
-                <textarea placeholder="ここに記入" rows="8"></textarea>
+                <textarea placeholder="ここに記入" rows="8" @focus="!auth.isLoggedIn && navigateTo('/login')"></textarea>
                 <div class="button-wrapper">
-                    <button class="post-button">シェアする</button>
+                    <button class="post-button" @click="handlePostClick">シェアする</button>
                 </div>
             </div>
         </div>
@@ -36,32 +37,31 @@
 
 <script setup lang="ts">
 import { signOut } from 'firebase/auth'
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 defineProps({
     isOpen: Boolean
 })
 
-const { $auth } = useNuxtApp()
+const auth = useAuthStore()
+
+const handlePostClick = () => {
+    if (!auth.isLoggedIn) {
+        navigateTo('/login')
+        return
+    }
+    console.log('投稿処理（未実装）')
+}
 
 const emit = defineEmits(['close'])
 
-const isLoggedIn = ref(false)
-
-onMounted(() => {
-    // Firebaseの認証状態を監視
-    if ($auth) {
-        isLoggedIn.value = $auth.currentUser !== null
-        // リアルタイムで認証状態を監視
-        $auth.onAuthStateChanged((user) => {
-            isLoggedIn.value = user !== null
-        })
-    }
-})
+const isLoggedIn = computed(() => auth.isLoggedIn)
+const loading = computed(() => auth.loading)
 
 const handleLogout = async () => {
     try {
-        await signOut($auth)
+        await signOut(auth.user?.auth)
         emit('close')
         await navigateTo('/')
     } catch (error) {

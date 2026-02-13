@@ -14,7 +14,8 @@
             </div>
             <div class="comment-form">
                 <div class="form-input">
-                    <input class="comment-form-input" v-model="text" type="text" placeholder="コメントを書く" />
+                    <input class="comment-form-input" v-model="text" type="text" placeholder="コメントを書く"
+                        @focus="!auth.isLoggedIn && navigateTo('/login')" />
                 </div>
                 <div class="form-button">
                     <button class="comment-button" @click="submit">コメント</button>
@@ -25,6 +26,10 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+const auth = useAuthStore()
+
 const props = defineProps({
     postId: Number,
     comments: Array
@@ -35,7 +40,11 @@ const emit = defineEmits(['submit'])
 const text = ref('')
 
 const submit = () => {
-    if (!text.value) return
+    if (!auth.isLoggedIn) {
+        navigateTo('/login')
+        return
+    }
+    if (!text.value.trim()) return
     emit('submit', text.value)
     text.value = ''
 }
