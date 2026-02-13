@@ -12,15 +12,19 @@
                     </div>
                 </div>
             </div>
-            <div class="comment-form">
+            <form class="comment-form" @submit.prevent="onSubmit">
                 <div class="form-input">
-                    <input class="comment-form-input" v-model="text" type="text" placeholder="コメントを書く"
-                        @focus="!auth.isLoggedIn && navigateTo('/login')" />
+                    <input class="comment-form-input" v-model="comment" type="text" placeholder="コメントを書く"
+                        :class="{ 'error': errors.comment }" @focus="!auth.isLoggedIn && navigateTo('/login')" />
+                    <span v-if="errors.comment" class="comment-error-message">
+                        {{ errors.comment }}
+                    </span>
                 </div>
                 <div class="form-button">
-                    <button class="comment-button" @click="submit">コメント</button>
+                    <button class="comment-button" type="submit" :disabled="isLoading">{{ isLoading ? '送信中...' : 'コメント'
+                        }}</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </template>
@@ -28,6 +32,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
+
 const auth = useAuthStore()
 
 const props = defineProps({
@@ -37,16 +44,42 @@ const props = defineProps({
 
 const emit = defineEmits(['submit'])
 
-const text = ref('')
+const schema = yup.object({
+    comment: yup
+        .string()
+        .required('コメントは入力必須です')
+        .max(120, '120文字以内で入力してください')
+})
 
-const submit = () => {
+const { handleSubmit, errors, resetForm } = useForm({
+    validationSchema: schema
+})
+
+const { value: comment } = useField('comment')
+
+const isLoading = ref(false)
+
+const submitHandler = handleSubmit(async (values) => {
+    isLoading.value = true
+
+    try {
+        emit('submit', values.comment)
+        resetForm()
+    } catch (error) {
+        console.error('コメント送信エラー:', error)
+        alert('コメント送信に失敗しました')
+    } finally {
+        isLoading.value = false
+    }
+})
+
+const onSubmit = async () => {
     if (!auth.isLoggedIn) {
-        navigateTo('/login')
+        await navigateTo('/login')
         return
     }
-    if (!text.value.trim()) return
-    emit('submit', text.value)
-    text.value = ''
+
+    await submitHandler()
 }
 </script>
 
@@ -77,7 +110,9 @@ const submit = () => {
 .form-input {
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
 }
 
 .comment-form-input {
@@ -87,6 +122,8 @@ const submit = () => {
     border: 1px solid #fff;
     border-radius: 8px;
     padding: 10px;
+    justify-content: center;
+    color: #fff;
 }
 
 .form-button {
@@ -147,5 +184,18 @@ const submit = () => {
 
 .content {
     font-size: 14px;
+}
+
+.comment-form-input.error {
+    border: 1px solid #e74c3c;
+}
+
+.comment-error-message {
+    width: 90%;
+    /* inputと幅を揃える */
+    text-align: left;
+    /* 左寄せ */
+    font-size: 13px;
+    color: #e74c3c;
 }
 </style>
