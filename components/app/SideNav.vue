@@ -24,13 +24,19 @@
                 <img src="/images/logout.png" alt="ログインアイコン" class="menu-icon" />
                 <span>ログイン</span>
             </button>
-            <div class="post-box">
+            <form class="post-box" @submit.prevent="onSubmit">
                 <label for="textarea">シェア</label>
-                <textarea placeholder="ここに記入" rows="8" @focus="!auth.isLoggedIn && navigateTo('/login')"></textarea>
+                <textarea class="post-box-input" v-model="message" placeholder="ここに記入" rows="8"
+                    :class="{ 'error': errors.message }" @focus="!auth.isLoggedIn && navigateTo('/login')"></textarea>
+                <span v-if="errors.message" class="post-error-message">
+                    {{ errors.message }}
+                </span>
                 <div class="button-wrapper">
-                    <button class="post-button" @click="handlePostClick">シェアする</button>
+                    <button class="post-button" type="submit" :disabled="!auth.isLoggedIn || isLoading">{{ isLoading ?
+                        '送信中...' : 'シェアする'
+                        }}</button>
                 </div>
-            </div>
+            </form>
         </div>
     </aside>
 </template>
@@ -39,6 +45,10 @@
 import { signOut } from 'firebase/auth'
 import { computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
+import { ref } from 'vue'
+
 
 defineProps({
     isOpen: Boolean
@@ -46,22 +56,16 @@ defineProps({
 
 const auth = useAuthStore()
 
-const handlePostClick = () => {
-    if (!auth.isLoggedIn) {
-        navigateTo('/login')
-        return
-    }
-    console.log('投稿処理（未実装）')
-}
+const emit = defineEmits(['close', 'submit'])
 
-const emit = defineEmits(['close'])
 
 const isLoggedIn = computed(() => auth.isLoggedIn)
 const loading = computed(() => auth.loading)
 
 const handleLogout = async () => {
     try {
-        await signOut(auth.user?.auth)
+        const { $auth } = useNuxtApp()
+        await signOut($auth)
         emit('close')
         await navigateTo('/')
     } catch (error) {
@@ -74,6 +78,45 @@ const handleLogin = () => {
     emit('close')
     navigateTo('/login')
 }
+
+const schema = yup.object({
+    message: yup
+        .string()
+        .required('投稿は入力必須です')
+        .max(120, '120文字以内で入力してください')
+})
+
+const { handleSubmit, errors, resetForm } = useForm({
+    validationSchema: schema
+})
+
+const { value: message } = useField('message')
+
+const isLoading = ref(false)
+
+const submitHandler = handleSubmit(async (values) => {
+    isLoading.value = true
+
+    try {
+        emit('submit', values.message)
+        resetForm()
+    } catch (error) {
+        console.error('投稿送信エラー:', error)
+        alert('投稿送信に失敗しました')
+    } finally {
+        isLoading.value = false
+    }
+})
+
+const onSubmit = async () => {
+    if (!auth.isLoggedIn) {
+        await navigateTo('/login')
+        return
+    }
+
+    await submitHandler()
+}
+
 </script>
 
 <style scoped>
@@ -189,6 +232,16 @@ const handleLogin = () => {
 
 .overlay {
     display: none;
+}
+
+.post-box-input.error {
+    border: 1px solid #e74c3c;
+}
+
+.post-error-message {
+    padding-left: 10px;
+    font-size: 14px;
+    color: #e74c3c;
 }
 
 @media (max-width: 767px) {

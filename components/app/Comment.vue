@@ -21,7 +21,8 @@
                     </span>
                 </div>
                 <div class="form-button">
-                    <button class="comment-button" type="submit" :disabled="isLoading">{{ isLoading ? '送信中...' : 'コメント'
+                    <button class="comment-button" type="submit" :disabled="!auth.isLoggedIn || isLoading">{{ isLoading
+                        ? '送信中...' : 'コメント'
                         }}</button>
                 </div>
             </form>
