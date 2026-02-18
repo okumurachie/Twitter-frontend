@@ -18,8 +18,22 @@
 <script setup>
 import { ref } from 'vue'
 import SideNav from '@/components/app/SideNav.vue'
+import { watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 const route = useRoute()
 const isSidebarOpen = ref(false)
+
+watch(
+    () => authStore.loading,
+    async (loading) => {
+        if (!loading && authStore.isLoggedIn) {
+            const response = await authStore.fetchMe()
+            console.log('Laravel response:', response)
+        }
+    }
+)
 </script>
 
 <style scoped>

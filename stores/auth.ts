@@ -19,12 +19,22 @@ export const useAuthStore = defineStore('auth', {
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     this.user = user;
-                    this.token = await user.getIdToken();
+                    this.token = await user.getIdToken(true);
                 } else {
                     this.user = null;
                     this.token = null;
                 }
                 this.loading = false;
+            });
+        },
+
+        async fetchMe() {
+            if (!this.token) return;
+
+            return await $fetch('http://127.0.0.1:8000/api/user', {
+                headers: {
+                    Authorization: `Bearer ${this.token}`,
+                },
             });
         },
     },
