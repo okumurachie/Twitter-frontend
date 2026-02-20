@@ -12,10 +12,31 @@ definePageMeta({
 })
 
 import Message from '@/components/app/Message.vue'
+import { useAuthStore } from '@/stores/auth'
+import { ref, watch } from 'vue'
 
-const currentUserId = 1
+const auth = useAuthStore()
+const currentUserId = ref(null)
 
-const { messages, toggleLike } = useMessages()
+watch(
+    () => auth.token,
+    async (token) => {
+        console.log('token changed:', token)
+
+        if (token) {
+            const me = await auth.fetchMe()
+            console.log('Laravel response:', me)
+            currentUserId.value = me?.id ?? null
+        }
+    },
+    { immediate: true }
+)
+
+const { messages, toggleLike, fetchMessages } = useMessages()
+
+onMounted(() => {
+    fetchMessages()
+})
 
 const onLike = (id) => {
     toggleLike(id)

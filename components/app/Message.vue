@@ -42,7 +42,8 @@ const props = defineProps({
 })
 
 const isMyPost = computed(() => {
-    return props.message.user.id === props.currentUserId
+    console.log(props.message.user_id, props.currentUserId)
+    return Number(props.message.user_id) === Number(props.currentUserId)
 })
 
 const emit = defineEmits(['like'])

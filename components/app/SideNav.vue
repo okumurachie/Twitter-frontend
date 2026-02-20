@@ -66,20 +66,15 @@ const handleLogin = () => {
 }
 const isLoading = ref(false)
 
+const { createMessage } = useMessages()
+
 const handlePostSubmit = async (message: string) => {
     isLoading.value = true
     try {
-        await $fetch('http://localhost:8000/api/posts', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${auth.token}`,
-            },
-            body: {
-                content: message,
-            },
-        })
-    } catch (error) {
-        console.error('投稿送信エラー:', error)
+        await createMessage(message)
+        emit('close')
+    } catch (error: any) {
+        console.error('投稿エラー:', error)
         alert('投稿送信に失敗しました')
     } finally {
         isLoading.value = false

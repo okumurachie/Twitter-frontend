@@ -5,11 +5,13 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null as any,
         token: null as string | null,
+        laravelUser: null as any,
         loading: true,
     }),
 
     getters: {
         isLoggedIn: (state) => !!state.user,
+        userId: (state) => state.laravelUser?.id ?? null,
     },
 
     actions: {
@@ -20,22 +22,35 @@ export const useAuthStore = defineStore('auth', {
                 if (user) {
                     this.user = user;
                     this.token = await user.getIdToken(true);
+                    await this.fetchMe();
                 } else {
                     this.user = null;
                     this.token = null;
+                    this.laravelUser = null;
                 }
                 this.loading = false;
             });
         },
 
         async fetchMe() {
-            if (!this.token) return;
+            if (!this.token) {
+                console.log('token missing');
+                return null;
+            }
 
-            return await $fetch('http://127.0.0.1:8000/api/user', {
-                headers: {
-                    Authorization: `Bearer ${this.token}`,
-                },
-            });
+            try {
+                const res = await $fetch('http://127.0.0.1:8000/api/user', {
+                    headers: {
+                        Authorization: `Bearer ${this.token}`,
+                    },
+                });
+
+                console.log('fetchMe result:', res);
+                return res;
+            } catch (error) {
+                console.error('fetchMe error:', error);
+                return null;
+            }
         },
     },
 });
