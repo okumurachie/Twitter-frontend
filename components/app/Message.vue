@@ -12,7 +12,7 @@
                         <span v-if="message.likes > 0" class="like-count">{{ message.likes }}</span>
                     </button>
 
-                    <button v-if="isMyPost" class="icon-button" @click="deletePost">
+                    <button v-if="isMyPost" type="button" class="icon-button" @click="deletePost">
                         <img src="/images/cross.png" alt="delete" />
                     </button>
 
@@ -52,9 +52,11 @@ const toggleLike = () => {
     emit('like', props.message.id)
 }
 
-const deletePost = () => {
-    // 仮：emitで親に通知
-    console.log('delete', props.message.id)
+const { deleteMessage } = useMessages()
+
+const deletePost = async () => {
+    await deleteMessage(props.message.id)
+    emit('deleted', props.message.id)
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="message-content">
         <Message v-for="message in messages" :key="message.id" :message="message" :current-user-id="currentUserId"
-            @like="onLike" />
+            @like="onLike" @deleted="removeMessage" />
     </div>
 </template>
 
@@ -43,6 +43,10 @@ onMounted(() => {
 
 const onLike = (id) => {
     toggleLike(id)
+}
+
+const removeMessage = (id) => {
+    messages.value = messages.value.filter(m => m.id !== id)
 }
 </script>
 
