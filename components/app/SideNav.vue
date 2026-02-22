@@ -53,6 +53,9 @@ const handleLogout = async () => {
         const { $auth } = useNuxtApp()
         await signOut($auth)
         emit('close')
+        auth.user = null
+        auth.token = null
+
         await navigateTo('/')
     } catch (error) {
         console.error('ログアウトエラー:', error)

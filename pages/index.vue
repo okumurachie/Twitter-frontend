@@ -13,10 +13,13 @@ definePageMeta({
 
 import Message from '@/components/app/Message.vue'
 import { useAuthStore } from '@/stores/auth'
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
+import { watch } from 'vue'
+
 
 const auth = useAuthStore()
-const currentUserId = ref(null)
+
+const currentUserId = computed(() => auth.user?.id ?? null)
 
 watch(
     () => auth.token,

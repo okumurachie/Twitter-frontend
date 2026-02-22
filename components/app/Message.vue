@@ -7,7 +7,7 @@
                 </span>
 
                 <div class="actions">
-                    <button class="icon-button" @click="toggleLike">
+                    <button class="icon-button" @click="toggleLike(message.id)">
                         <img src="/images/heart.png" alt="like" class="heart" :class="{ liked: message.liked }" />
                         <span v-if="message.likes > 0" class="like-count">{{ message.likes }}</span>
                     </button>
@@ -42,7 +42,7 @@ const props = defineProps({
 })
 
 const isMyPost = computed(() => {
-    console.log(props.message.user_id, props.currentUserId)
+    console.log("post.user_id:", props.message.user_id, "currentUserId:", props.currentUserId)
     return Number(props.message.user_id) === Number(props.currentUserId)
 })
 

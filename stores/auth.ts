@@ -34,7 +34,6 @@ export const useAuthStore = defineStore('auth', {
 
         async fetchMe() {
             if (!this.token) {
-                console.log('token missing');
                 return null;
             }
 
@@ -44,8 +43,7 @@ export const useAuthStore = defineStore('auth', {
                         Authorization: `Bearer ${this.token}`,
                     },
                 });
-
-                console.log('fetchMe result:', res);
+                this.user = res;
                 return res;
             } catch (error) {
                 console.error('fetchMe error:', error);

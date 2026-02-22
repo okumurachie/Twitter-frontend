@@ -1,7 +1,8 @@
 import { useAuthStore } from '@/stores/auth';
+import { getAuth } from 'firebase/auth';
+
 export const useMessages = () => {
     const messages = useState('messages', () => []);
-    const user = useState('user');
 
     const fetchMessages = async () => {
         try {
@@ -51,31 +52,39 @@ export const useMessages = () => {
     };
 
     const toggleLike = async (id) => {
-        if (!user.value) {
+        const auth = getAuth();
+
+        if (!auth.currentUser) {
             return navigateTo('/login');
         }
 
+        const target = findMessage(id);
+        if (!target) return;
+
+        if (target.loading) return;
+        target.loading = true;
+
         try {
+            const token = await auth.currentUser.getIdToken();
             const res = await $fetch(
                 `http://localhost:8000/api/posts/${id}/like`,
                 {
                     method: 'POST',
                     headers: {
-                        Authorization: `Bearer ${user.value.token}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 },
             );
 
-            const target = findMessage(id);
-            if (!target) return;
-
             target.liked = res.liked;
-            target.likes += res.liked ? 1 : -1;
+            target.likes = res.likes;
         } catch (error) {
             if (error.response?.status === 401) {
                 return navigateTo('/login');
             }
             console.error('いいね失敗, error');
+        } finally {
+            target.loading = false;
         }
     };
 

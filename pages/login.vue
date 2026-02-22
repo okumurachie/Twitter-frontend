@@ -2,6 +2,7 @@
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+import { signOut } from "firebase/auth"
 
 definePageMeta({
     layout: 'auth'
@@ -29,14 +30,24 @@ const { value: password } = useField('password')
 const isLoading = ref(false)
 
 const onSubmit = handleSubmit(async (values) => {
+    await signOut($auth)
+    console.log("Signed out first")
     isLoading.value = true
 
     try {
-        await signInWithEmailAndPassword(
+        const userCredential = await signInWithEmailAndPassword(
             $auth,
             values.email,
             values.password
         )
+        console.log("Firebase logged in user:", userCredential.user.email)
+        const token = await userCredential.user.getIdToken()
+
+        const authStore = useAuthStore()
+        authStore.token = token
+
+        console.log("NEW TOKEN UID:", userCredential.user.uid)
+        console.log("NEW TOKEN:", token)
 
         await navigateTo('/')
     } catch (error: any) {
