@@ -40,14 +40,10 @@ const onSubmit = handleSubmit(async (values) => {
             values.email,
             values.password
         )
-        console.log("Firebase logged in user:", userCredential.user.email)
         const token = await userCredential.user.getIdToken()
 
         const authStore = useAuthStore()
         authStore.token = token
-
-        console.log("NEW TOKEN UID:", userCredential.user.uid)
-        console.log("NEW TOKEN:", token)
 
         await navigateTo('/')
     } catch (error: any) {

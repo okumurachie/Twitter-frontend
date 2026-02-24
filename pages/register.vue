@@ -34,7 +34,6 @@ const { value: password } = useField('password')
 
 const isLoading = ref(false)
 
-// フォーム送信処理
 const onSubmit = handleSubmit(async (values) => {
     isLoading.value = true
 
