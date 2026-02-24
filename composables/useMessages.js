@@ -10,7 +10,7 @@ export const useMessages = () => {
             const res = await $fetch('http://localhost:8000/api/posts');
             messages.value = res.map((post) => ({
                 id: post.id,
-                body: post.content,
+                content: post.content,
                 user: post.user,
                 likes: post.likes_count ?? post.likes?.length ?? 0,
                 liked: post.liked ?? false,
@@ -37,7 +37,7 @@ export const useMessages = () => {
         // 即時反映
         messages.value.unshift({
             id: res.id,
-            body: res.content,
+            content: res.content,
             user: res.user,
             likes: 0,
             liked: false,

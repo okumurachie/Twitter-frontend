@@ -6,8 +6,8 @@
         <div class="comment-inner">
             <div class="comment-list">
                 <div v-for="comment in comments" :key="comment.id" class="comment-body">
-                    <div class="commet-body-wrapper">
-                        <div class="user">{{ comment.userName }}</div>
+                    <div class="comment-body-wrapper">
+                        <div class="user">{{ comment.user?.name }}</div>
                         <div class="content">{{ comment.content }}</div>
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                 <div class="form-button">
                     <button class="comment-button" type="submit" :disabled="!auth.isLoggedIn || isLoading">{{ isLoading
                         ? '送信中...' : 'コメント'
-                        }}</button>
+                    }}</button>
                 </div>
             </form>
         </div>
@@ -138,7 +138,7 @@ const onSubmit = async () => {
     border-bottom: 1px solid #fff;
 }
 
-.commet-body-wrapper {
+.comment-body-wrapper {
     height: auto;
     padding: 16px 18px;
     display: flex;

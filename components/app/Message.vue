@@ -23,7 +23,7 @@
             </div>
 
             <div class="message-body">
-                {{ message.body }}
+                {{ message.content }}
             </div>
         </div>
     </div>
