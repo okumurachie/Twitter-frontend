@@ -1,5 +1,6 @@
 <template>
-    <Message v-if="message" :message="message" :current-user-id="currentUserId" @like="onLike" />
+    <Message v-if="message" :message="message" :current-user-id="currentUserId" :show-detail-button="false"
+        @like="onLike" />
     <Comment :post-id="postId" :comments="comments" @submit="onSubmitComment" />
 </template>
 

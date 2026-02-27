@@ -16,7 +16,7 @@
                         <img src="/images/cross.png" alt="delete" />
                     </button>
 
-                    <NuxtLink :to="`/posts/${message.id}`" class="icon-button">
+                    <NuxtLink v-if="showDetailButton" :to="`/posts/${message.id}`" class="icon-button">
                         <img src="/images/detail.png" alt="create" />
                     </NuxtLink>
                 </div>
@@ -38,6 +38,10 @@ const props = defineProps({
     currentUserId: {
         type: Number,
         required: true
+    },
+    showDetailButton: {
+        type: Boolean,
+        default: true
     }
 })
 
