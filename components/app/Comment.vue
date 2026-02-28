@@ -193,9 +193,7 @@ const onSubmit = async () => {
 
 .comment-error-message {
     width: 90%;
-    /* inputと幅を揃える */
     text-align: left;
-    /* 左寄せ */
     font-size: 13px;
     color: #e74c3c;
 }

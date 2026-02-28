@@ -34,7 +34,6 @@ export const useMessages = () => {
             body: { content },
         });
 
-        // 即時反映
         messages.value.unshift({
             id: res.id,
             content: res.content,

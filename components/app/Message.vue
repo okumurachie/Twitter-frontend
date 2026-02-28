@@ -3,7 +3,7 @@
         <div class="message-inner">
             <div class="message-header">
                 <span class="username">
-                    {{ message.user.name }}
+                    {{ message.user?.name }}
                 </span>
 
                 <div class="actions">
@@ -133,10 +133,8 @@ const deletePost = async () => {
 .message-body {
     margin-top: 6px;
     font-size: 14px;
-    /* ①より小さめ */
     line-height: 1.6;
     color: #e7e9ea;
     white-space: pre-wrap;
-    /* 改行対応 */
 }
 </style>
