@@ -1,9 +1,9 @@
-# Twitter風SNSアプリ - (Frontend API)
+# Twitter風SNSアプリ - (Frontend)
 
 ## 概要
 
-Twitter風の簡易SNSアプリのフロントエンドす。
-Nuxt3 を使用してUIを構築し、LaravelのBackend APIと連携しています。
+Twitter風の簡易SNSアプリのフロントエンドです。
+Nuxt3を使用してUIを構築し、LaravelのBackend APIと連携しています。
 
 ## トップ画面
 
@@ -17,8 +17,8 @@ Nuxt3 を使用してUIを構築し、LaravelのBackend APIと連携していま
 
 ## 関連リポジトリ
 
-- Frontend: https://github.com/okumurachie/Twitter-frontend.git
-- Backend: https://github.com/okumurachie/Twitter-backend.git
+- Frontend: https://github.com/okumurachie/Twitter-frontend
+- Backend: https://github.com/okumurachie/Twitter-backend
 
 ## アプリケーションURL
 
@@ -26,23 +26,28 @@ Nuxt3 を使用してUIを構築し、LaravelのBackend APIと連携していま
 
 ## 動作前提
 
-- このアプリはバックエンドが起動している必要があります。先に Backend 側 README に従い、
+- 本アプリはバックエンドが起動している必要があります。先にBackend側READMEに従い、以下を実行してください。
 
-    php artisan sserve
-
-    を実行してください。
+```bash
+php artisan serve
+```
 
 # 環境構築手順（ローカル開発用）
 
 ## 1.リポジトリをクローン
 
-- git clone git@github.com:okumurachie/Twitter-frontend.git
-- cd Twitter-frontend
+```bash
+git clone git@github.com:okumurachie/Twitter-frontend.git
+cd Twitter-frontend
+```
 
 ## 2. .envファイル作成
 
-- cp .env.example .env
-  (.env.example ファイルから.env を作成し、環境変数を変更)
+```bash
+cp .env.example .env
+```
+
+(.env.example ファイルから.env を作成し、環境変数を変更)
 
 ## 3. .envファイルにFirebase設定値を記入
 
@@ -60,15 +65,24 @@ Nuxt3 を使用してUIを構築し、LaravelのBackend APIと連携していま
 
 ## 4.依存パッケージインストール
 
-- npm install
+```bash
+npm install
+```
 
 ## 5.開発サーバー起動
 
-- npm run dev
+```bash
+npm run dev
+```
 
 ## 6.アクセス
 
 - http://localhost:3000
+
+## 使用技術
+
+- Nuxt.js
+- Firebase Authentication（IDトークン認証）
 
 ## 主な機能
 
@@ -99,3 +113,11 @@ Nuxt3 を使用してUIを構築し、LaravelのBackend APIと連携していま
 - Seederユーザー（Test User1 / Test User2）は表示専用です。
 - 操作確認は「新規登録」したユーザーで行ってください。
 - Backendが起動していない場合、投稿や認証は動作しません。
+
+## 開発環境
+
+- 商品一覧画面（トップ画面）：http://localhost:3000/
+- 会員登録：http://localhost:3000/register
+- ログイン:http://localhost:3000/login
+
+# Twitter-frontend
