@@ -46,6 +46,7 @@ const onSubmit = handleSubmit(async (values) => {
         await updateProfile(userCredential.user, {
             displayName: values.username
         })
+        await userCredential.user.getIdToken(true)
         await navigateTo('/')
     } catch (error: any) {
         console.error('新規登録エラー:', error)
