@@ -46,7 +46,14 @@ const onSubmit = handleSubmit(async (values) => {
         await updateProfile(userCredential.user, {
             displayName: values.username
         })
-        await userCredential.user.getIdToken(true)
+        const idToken = await userCredential.user.getIdToken(true)
+
+        await $fetch('http://localhost:8000/api/user/update-name', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${idToken}` },
+            body: { name: values.username }
+        })
+
         await navigateTo('/')
     } catch (error: any) {
         console.error('新規登録エラー:', error)
