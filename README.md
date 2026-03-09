@@ -88,7 +88,7 @@ http://localhost:3000
 
 ## 使用技術
 
-- Nuxt 4.3(Vue 3ベース)
+- Nuxt 4(Vue 3)
 - Pinia(状態管理)
 - Firebase 12系(認証)
 - vee-validate + yup(フォームバリデーション)
@@ -101,7 +101,7 @@ http://localhost:3000
 - 投稿作成・削除(認証ユーザーのみ)
 - いいね機能(重複防止)
 - コメント機能
-- 投稿追加・削除・コメント追加・いいね機能は認証ユーザーのみ操作可能
+- 投稿作成・削除・コメント追加・いいね機能は認証ユーザーのみ操作可能
 - 非同期通信(API連携)
 - 状態管理(ログイン状態保持)
 - 自身の投稿のみ削除可能
@@ -139,5 +139,3 @@ http://localhost:3000
 会員登録：http://localhost:3000/register
 ログイン:http://localhost:3000/login
 ```
-
-# Twitter-frontend
