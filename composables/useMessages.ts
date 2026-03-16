@@ -102,7 +102,7 @@ export const useMessages = () => {
     };
 
     const deleteMessage = async (id: number) => {
-        await $fetch(`http://127.0.0.1:8000/api/posts/${id}`, {
+        await $fetch(`http://localhost:8000/api/posts/${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${auth.token}`,

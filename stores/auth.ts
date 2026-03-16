@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
 
             try {
                 const res = await $fetch<LaravelUser>(
-                    'http://127.0.0.1:8000/api/user',
+                    'http://localhost:8000/api/user',
                     {
                         headers: {
                             Authorization: `Bearer ${this.token}`,
